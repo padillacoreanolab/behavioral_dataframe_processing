@@ -1,3 +1,10 @@
+# Conda environment related files and folders
+*env
+
+# Project related files and folders
+data/
+proc/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -39,26 +39,37 @@ https://code.visualstudio.com/Download
 
 - 2. Once you have Git, download the repository in a folder that you want to save it in. To move to the desired folder, type the following command into your Command-line interface program: `cd {/path/to/folder}`
     - Replace `{/path/to/folder}` with the absolute or relative path to the folder that you want to save the Github repository in. We recommend creating a folder for programming related projects.
+    - More information on what an absolute or relative path is:
+        - Mac: https://www.josharcher.uk/code/find-path-to-folder-on-mac/
+        - Windows: https://www.computerhope.com/issues/ch001708.htm
 - 2.1 Download the Github repository with the command: `git clone https://github.com/padillacoreanolab/behavioral_dataframe_processing`
 - NOTE: Every time you use this repo after cloning it, check for updates with: 
     - `cd {./path/to}/behavioral_dataframe_processing`
     - `git pull origin main`
 
-TODO: Edit the rest
 ### Step 2. Create Conda Environment to Install Necessary Python libraries
 - Check if you have Anaconda:
-    - Use the `python` command in your terminal. If you have Anaconda, then it will say "Anaconda" somewhere in the output.
-    - If you don't have Anaconda, follow the installation instructions on: https://www.anaconda.com/ 
+    - Type `python` in your terminal, and then press `Enter`. If you have Anaconda, then it will say "Anaconda" somewhere in the output.
+    - If you don't have Anaconda, follow the installation instructions:
+        - Mac: https://www.notion.so/Anaconda-Installation-Mac-487707ed7b5749bc92a168be8717b9be
+        - Windows: https://garnet-rotate-01f.notion.site/Anaconda-Installation-Windows-a90983afbed448d29ab6f4fade6730d5 
 
+- Create the Conda environment by following the instructions in: [./conda_environment/environment_install.sh](./conda_environment/environment_install.sh)
 
-- Create the Conda environment by following the instructions in: [./bin/conda_environments/doc/README.md](./bin/conda_environments/doc/README.md)
-- This step only needs to be done once. Every subsquent time you want to run the analysis, you'll turn on the Conda environment with:
+- NOTE: This step only needs to be done once. Every subsquent time you want to run the analysis, you'll turn on the Conda environment with:
     - `conda deactivate`
-    - `conda activate {./path/to}/med_pc_repo/bin/conda_environments/env/med_pc_env`
+    - `conda activate {./path/to}/behavioral_processing_env`
+
+TODO: Look into error with MoviePy
+- SafetyError: The package for moviepy located at /home/riwata/miniconda3/pkgs/moviepy-1.0.3-pyhd8ed1ab_0
+appears to be corrupted. The path 'site-packages/moviepy/decorators.py'
+has an incorrect size.
+  reported size: 3614 bytes
+  actual size: 3608 bytes
 
 ### Step 2. Turn on Jupyter Notebooks Program
-- 1 Use the command `jupyter notebook --allow-root` in your terminal
-- 1.1 If a browser window doesn't pop up with Jupyter notebooks, open up a browser window. Then copy and paste the URL given in the command line. It will be followed by `To access the notebook, open this file in a browser:` and `Or copy and paste one of these URLs:`
+- 1 Type the command `jupyter notebook --allow-root` in your terminal, and then press inter
+- 1.1 If a browser window doesn't pop up with Jupyter notebooks, open up a browser window. Then copy and paste the URL given in the command line to the address bar. It will be followed by `To access the notebook, open this file in a browser:` and `Or copy and paste one of these URLs:`
     - It should have a format similar to: `http://localhost:8888/?token=gsOH0vx373NRzHUmDzwX9TFzBf5Wx6czWIr1irV7ERKBLmlK`
 - 2 Click on [./jupyter_notebooks](./jupyter_notebooks) in the Jupyter Notebooks GUI (Should be in the web browser)
 
@@ -74,3 +85,6 @@ TODO: Edit the rest
 ### Python library to extract data from MED-PC Recording Files
 - https://github.com/cyf203/medpc2excel
 - https://pypi.org/project/medpc2excel/
+
+### ELO Score
+- https://www.omnicalculator.com/sports/elo
