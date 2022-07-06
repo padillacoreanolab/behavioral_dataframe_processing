@@ -4,6 +4,8 @@
 # Project related files and folders
 data/
 proc/
+old/
+*xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
