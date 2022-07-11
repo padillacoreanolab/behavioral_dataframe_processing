@@ -36,7 +36,6 @@ DIM K = 2500 \CS type
 LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90", 100", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90"  \, 100", 108", 117", 121", 133", 145", 165" \CS ITI values (tone + houselight)
 LIST E = 120", 80", 95" \CS ITI values for first few trials
 LIST M = 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 \1 is CS1, 2 is CS2, 3 is CS3
-LIST J =0.7, 0.7, 0.7, 0.7 \0.9, 0.9, 0.9, 0.9 \0, 0.3, 0.6, 0.9
 
 \Counter and Flag array
 DIM C = 10
@@ -50,7 +49,6 @@ DIM C = 10
 \C(6) number of CS2
 \C(7) number of CS3
 \C(8) number of sucrose deliveries
-\C(9) number of shock deliveries
 
 \Z-pulses
 \Z1: start task after initial delay
@@ -73,7 +71,7 @@ DIM C = 10
 \G -
 \H -
 \I -
-\J - Shock intensity repo
+\J - 
 \K - CS type
 \L -
 \M - CS type repo
