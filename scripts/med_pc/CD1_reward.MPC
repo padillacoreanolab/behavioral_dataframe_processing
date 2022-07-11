@@ -99,6 +99,9 @@ DISKCOLUMNS = 1
 \Detect port entry
 S.S.1,
 S1,
+\\ C(3) flag to indicate if sucrose is in port
+\\ C(3) = 0 if no port entry was made 
+\\ C(3) = 1 if port entry was made (i.e., no sucrose)
     #start: SET C(3) = 1; Z1 ---> S2
 
 
@@ -108,6 +111,9 @@ S1,
 
 \\\ USE ONLY IF INPUT IS SET TO LEVEL MODE
 S2,
+\\ #R^port is checking the input of the port
+\\ Y - Beam break monitor variable
+
     #R^port: ADD Y; IF Y >= 2 [@BeamBreak, @NoBeamBreak]
                  @BeamBreak: Z3; SET Y = 0 ---> S3
                  @NoBeamBreak: ---> SX
