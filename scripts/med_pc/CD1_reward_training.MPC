@@ -34,9 +34,9 @@ DIM K = 2500 \CS type
 DIM G = 2500 \controlled_stimulus_seconds computer clock time (seconds on clock every time light turns on)
 DIM H = 2500 \controlled_stimulus_minutes computer clock time (minutes on clock every time light turns on)
 DIM I = 2500 \controlled_stimulus_hours computer clock time (hours every time light turns on)
-DIM A = 2500 \port_entry_seconds computer clock time (seconds on clock every time light turns on)
-DIM B = 2500 \port_entry_minutes computer clock time (minutes on clock every time light turns on)
-DIM C = 2500 \port_entry_hours computer clock time (hours every time light turns on)
+DIM X = 2500 \port_entry_seconds computer clock time (seconds on clock every time light turns on)
+DIM Y = 2500 \port_entry_minutes computer clock time (minutes on clock every time light turns on)
+DIM Z = 2500 \port_entry_hours computer clock time (hours every time light turns on)
 
 LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90", 100", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90"  \, 100", 108", 117", 121", 133", 145", 165" \CS ITI values (tone + houselight)
 LIST E = 120", 80", 95" \CS ITI values for first few trials
@@ -124,11 +124,10 @@ S3,
     #R^port: ---> S3
 
 
-
 \After port entry
 S.S.2,
 S1,
-    #Z3: SET P(C(0)) = T; on^peout; SHOW 6, LastPortEntry, P(C(0)); ADD C(0); SET P(C(0)) = -987.987; SET C(3) = 1; SHOW 7, TotalPortEntries, C(0) ---> S1
+    #Z3: SET X(C(0)) = CURRENTSECONDS; SET Y(C(0)) = CURRENTMINUTES; SET Z(C(0)) = CURRENTHOURS; SET P(C(0)) = T; on^peout; SHOW 6, LastPortEntry, P(C(0)); ADD C(0); SET P(C(0)) = -987.987; SET C(3) = 1; SHOW 7, TotalPortEntries, C(0) ---> S1
 
 
 \\\ USE ONLY IF INPUT IS SET TO LEVEL MODE
@@ -149,12 +148,12 @@ S3,
 S4,
   D#T:  SET K(C(1)) = 1; SET D = V(C(1)); ADD C(1); SHOW 10, Current ITI, D; Z2 ---> S4
 
-\Turn on CS stimulus
+\ Turn on CS stimulus and recording time on the computer
 S.S.6,
 S1,
     #Z2: on^csout ---> S2
 S2,
-    0.0001": SHOW 3, CSNumber, C(1); SET S(C(1) - 1) = T; SET S(C(1)) = -987.987; SHOW 4, CSpresentationTime, S(C(1) - 1);
+    0.0001": SHOW 3, CSNumber, C(1); SET S(C(1) - 1) = T; SET G(C(1) - 1) = CURRENTSECONDS; SET H(C(1) - 1) = CURRENTMINUTES; SET I(C(1) - 1) = CURRENTHOURS; SET S(C(1)) = -987.987; SHOW 4, CSpresentationSeconds, G(C(1) - 1);
                 IF K(C(1)-1) = 1 [@cs1, @ncs1]
                     @cs1: off^cs1out; on^houselight; ADD C(5); SHOW 8, nCS1, C(5); Z5 ---> S3
                     @ncs2: IF K(C(1)-1) = 2 [@cs2, @cs3]
@@ -183,9 +182,13 @@ S1,
 
 S2,
     4": on^pump; SET Q(C(2)) = T; SET R(C(2)) = (T - U)*100; SHOW 12, USLatency, R(C(2)); ADD C(2); SET Q(C(2)) = -987.987; SET R(C(2) + 1) = -987.987; ADD C(8); SHOW 11, NumSucroseDeliveries, C(8)  ---> S3         \increment sucrose delivery counter
+
+\ Reset "port entered" flag,
 S3,
-    \0.5": off^pump ---> S1    \reset "port entered" flag, for C57s
-    1": off^pump ---> S1     \for CD1s
+    \ Uncomment for C57s
+    \0.5": off^pump ---> S1    
+    \ Uncomment for CD1s
+    1": off^pump ---> S1     
 
 S.S.8,   \CS1
 S1,
