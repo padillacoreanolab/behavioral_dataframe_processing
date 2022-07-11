@@ -13,7 +13,6 @@
 ^tone4 = 5
 ^pump = 9
 ^whitenoise = 1
-^laser=10
 ^csout = 5
 ^peout = 15
 ^cs1out = 17
@@ -206,27 +205,21 @@ S1,
 S2,
     0.01": SET T = T + 0.01 ---> S2
 
-
-S.S.13,               \Stop session after however many minutes AND EPOCH LASER CONTROL
+\ Stop session after however many minutes
+S.S.13,               
 S1,
-    #start: on^cs1out; on^whitenoise; on^houselight; on^laser---> S2 \Laser starts on (on means TTL output is off)
+    #start: on^cs1out; on^whitenoise; on^houselight; ---> S2
 S2,
-    0': off^laser--->S3 \ Laser turns off 5 minutes after start
-S3,
-    5': on^laser--->S4 \ Laser turns on 10 minutes later
-S4,
-    10': off^laser--->S5 \ Laser turns off 5 minutes later
-S5,
-    5': on^laser--->S6 \ Laser turns on 10 minutes later
-S6,
-    360': off^whitenoise; off^houselight ---> stopabortflush \when time is up, store data and turn off everything.
-S.S.14,        \On screen clock
+    60': off^whitenoise; off^houselight ---> stopabortflush \when time is up, store data and turn off everything.
+
+\ On Screen clock
+S.S.14,
 S1,
     #start: on^fan ---> S2
 S2,
     1": SHOW 5, Clock, T; SET A = (T - U)*100; SHOW 9, TimeFromLastCS, A ---> SX
 
-\Keep time since the start of CS presentation
+\ Keep time since the start of CS presentation
 S.S.15,
 S1,
     #Z2: SET U = T ---> S1
