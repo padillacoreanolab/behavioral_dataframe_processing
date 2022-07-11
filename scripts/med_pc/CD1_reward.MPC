@@ -70,7 +70,7 @@ DIM C = 10
 \C - Counter array
 \D - Current ITI value
 \E - CS ITI values for first few trials
-\F - Shock duration
+\F -
 \G -
 \H -
 \I -
@@ -99,7 +99,7 @@ DISKCOLUMNS = 1
 \Detect port entry
 S.S.1,
 S1,
-    #start: SET F = 2000; SET C(3) = 1; Z1 ---> S2
+    #start: SET C(3) = 1; Z1 ---> S2
 
 
 \\\ USE ONLY THIS S2 IF INPUT IS SET TO TOGGLE MODE
