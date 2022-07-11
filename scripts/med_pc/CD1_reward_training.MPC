@@ -31,6 +31,12 @@ DIM W = 2500 \ITI values used for CS
 DIM S = 2500 \CS presentation values (absolute - every time light turns on)
 DIM N = 20000 \Port exit time stamp array
 DIM K = 2500 \CS type
+DIM G = 2500 \controlled_stimulus_seconds computer clock time (seconds on clock every time light turns on)
+DIM H = 2500 \controlled_stimulus_minutes computer clock time (minutes on clock every time light turns on)
+DIM I = 2500 \controlled_stimulus_hours computer clock time (hours every time light turns on)
+DIM A = 2500 \port_entry_seconds computer clock time (seconds on clock every time light turns on)
+DIM B = 2500 \port_entry_minutes computer clock time (minutes on clock every time light turns on)
+DIM C = 2500 \port_entry_hours computer clock time (hours every time light turns on)
 
 LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90", 100", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90"  \, 100", 108", 117", 121", 133", 145", 165" \CS ITI values (tone + houselight)
 LIST E = 120", 80", 95" \CS ITI values for first few trials
