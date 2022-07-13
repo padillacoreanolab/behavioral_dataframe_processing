@@ -39,7 +39,6 @@ DIM F = 2500 \port_entry_minutes computer clock time (minutes on clock every tim
 DIM J = 2500 \port_entry_hours computer clock time (hours every time light turns on)
 
 LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90", 100", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90"  \, 100", 108", 117", 121", 133", 145", 165" \CS ITI values (tone + houselight)
-LIST E = 120", 80", 95" \CS ITI values for first few trials
 
 \Counter and Flag array
 DIM C = 10
@@ -141,12 +140,11 @@ S1,
 S.S.5,
 S1,
     #Z1: ---> S2
+\Initial delay
 S2,
-    30":  ---> S3  \Initial delay
+    60":  ---> S3  
 S3,
-    30":  ---> S4
-S4,
-  D#T:  SET K(C(1)) = 1; SET D = V(C(1)); ADD C(1); SHOW 10, Current ITI, D; Z2 ---> S4
+  D#T:  SET K(C(1)) = 1; SET D = V(C(1)); ADD C(1); SHOW 10, Current ITI, D; Z2 ---> S3
 
 \ Turn on CS stimulus and recording time on the computer
 S.S.6,
