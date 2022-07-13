@@ -38,14 +38,19 @@ DIM B = 2500 \port_entry_seconds computer clock time (seconds on clock every tim
 DIM F = 2500 \port_entry_minutes computer clock time (minutes on clock every time light turns on)
 DIM J = 2500 \port_entry_hours computer clock time (hours every time light turns on)
 
-LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90", 100", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90"  \, 100", 108", 117", 121", 133", 145", 165" \CS ITI values (tone + houselight)
+\Original List of ITIs
+\LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90", 100", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90", 90" \, 100", 108", 117", 121", 133", 145", 165" \CS ITI values (tone + houselight)
+\ 30 Minute Duration for Competition
+LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80"
+\ 60 Minute Duration for Training
+LIST V = 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 120", 80", 95", 80", 90", 80", 75", 100", 95", 90", 80", 90", 100", 90", 120", 90", 85", 90", 95", 90", 80", 90"
 
 \Counter and Flag array
 DIM C = 10
 \All counters are zero-indexed!! Meaning, if C(0) = 3, there were 4 port entries
 \C(0) counter for number of port entries
 \C(1) counter for CS presentation number
-\C(2) counter for US delivery : this is 1-indexed,  meaning number indicates number of sucrose deliveries
+\C(2) counter for US delivery : this is 1-indexed, meaning number indicates number of sucrose deliveries
 \C(3) flag to indicate if sucrose is in port =0 if no port entry was made, =1 if port entry was made (i.e., no sucrose)
 \C(4) counter for number of port exits
 \C(5) number of CS1
@@ -102,132 +107,132 @@ S1,
 \\ C(3) flag to indicate if sucrose is in port
 \\ C(3) = 0 if no port entry was made
 \\ C(3) = 1 if port entry was made (i.e., no sucrose)
-    #start: SET C(3) = 1; Z1 ---> S2
+  #start: SET C(3) = 1; Z1 ---> S2
 
 
 \\\ USE ONLY THIS S2 IF INPUT IS SET TO TOGGLE MODE
 \S2,
-\    #R^port: Z3 ---> S2
+\  #R^port: Z3 ---> S2
 
 \\\ USE ONLY IF INPUT IS SET TO LEVEL MODE
 S2,
 \\ #R^port is checking the input of the port
 \\ Y - Beam break monitor variable
 \\ TODO: Figure out Y needs to be greater than 2
-    #R^port: ADD Y; IF Y >= 2 [@BeamBreak, @NoBeamBreak]
-                 @BeamBreak: Z3; SET Y = 0 ---> S3
-                 @NoBeamBreak: ---> SX
-    0.02": SET Y = 0 ---> S2
+  #R^port: ADD Y; IF Y >= 2 [@BeamBreak, @NoBeamBreak]
+         @BeamBreak: Z3; SET Y = 0 ---> S3
+         @NoBeamBreak: ---> SX
+  0.02": SET Y = 0 ---> S2
 S3,
-    0.02": Z4 ---> S2
-    #R^port: ---> S3
+  0.02": Z4 ---> S2
+  #R^port: ---> S3
 
 
 \After port entry
 S.S.2,
 S1,
-    #Z3: SET B(C(0)) = CURRENTSECONDS; SET F(C(0)) = CURRENTMINUTES; SET J(C(0)) = CURRENTHOURS; SET P(C(0)) = T; on^peout; SHOW 6, LastPortEntry, P(C(0)); ADD C(0); SET P(C(0)) = -987.987; SET C(3) = 1; SHOW 7, TotalPortEntries, C(0) ---> S1
+  #Z3: SET B(C(0)) = CURRENTSECONDS; SET F(C(0)) = CURRENTMINUTES; SET J(C(0)) = CURRENTHOURS; SET P(C(0)) = T; on^peout; SHOW 6, LastPortEntry, P(C(0)); ADD C(0); SET P(C(0)) = -987.987; SET C(3) = 1; SHOW 7, TotalPortEntries, C(0) ---> S1
 
 
 \\\ USE ONLY IF INPUT IS SET TO LEVEL MODE
 \After port exit
 S.S.3,
 S1,
-    #Z4: SET N(C(4)) = T; off^peout; SHOW 1, LastPortExit, N(C(4)); ADD C(4); SET N(C(4)) = -987.987; SHOW 2, TotalPortExits, C(4) ---> S1
+  #Z4: SET N(C(4)) = T; off^peout; SHOW 1, LastPortExit, N(C(4)); ADD C(4); SET N(C(4)) = -987.987; SHOW 2, TotalPortExits, C(4) ---> S1
 
 \Calculate ITI for CS presentation
 S.S.5,
 S1,
-    #Z1: ---> S2
+  #Z1: ---> S2
 \Initial delay
 S2,
-    60":  ---> S3  
+  60": ---> S3 
 S3,
-  D#T:  SET K(C(1)) = 1; SET D = V(C(1)); ADD C(1); SHOW 10, Current ITI, D; Z2 ---> S3
+ D#T: SET K(C(1)) = 1; SET D = V(C(1)); ADD C(1); SHOW 10, Current ITI, D; Z2 ---> S3
 
 \ Turn on CS stimulus and recording time on the computer
 S.S.6,
 S1,
-    #Z2: on^csout ---> S2
+  #Z2: on^csout ---> S2
 S2,
-    0.0001": SHOW 3, CSNumber, C(1); SET S(C(1) - 1) = T; SET G(C(1) - 1) = CURRENTSECONDS; SET H(C(1) - 1) = CURRENTMINUTES; SET I(C(1) - 1) = CURRENTHOURS; SET S(C(1)) = -987.987; SHOW 4, CSpresentationSeconds, G(C(1) - 1);
-                IF K(C(1)-1) = 1 [@cs1, @ncs1]
-                    @cs1: off^cs1out; on^houselight; ADD C(5); SHOW 8, nCS1, C(5); Z5 ---> S3
-                    @ncs2: IF K(C(1)-1) = 2 [@cs2, @cs3]
-                        @cs2: on^cs2out; on^houselight; ADD C(6); SHOW 13, nCS2, C(6); Z6 ---> S4
-                        @cs3: on^cs3out; ADD C(7); SHOW 18, nCS3, C(7); Z7  ---> S5
+  0.0001": SHOW 3, CSNumber, C(1); SET S(C(1) - 1) = T; SET G(C(1) - 1) = CURRENTSECONDS; SET H(C(1) - 1) = CURRENTMINUTES; SET I(C(1) - 1) = CURRENTHOURS; SET S(C(1)) = -987.987; SHOW 4, CSpresentationSeconds, G(C(1) - 1);
+        IF K(C(1)-1) = 1 [@cs1, @ncs1]
+          @cs1: off^cs1out; on^houselight; ADD C(5); SHOW 8, nCS1, C(5); Z5 ---> S3
+          @ncs2: IF K(C(1)-1) = 2 [@cs2, @cs3]
+            @cs2: on^cs2out; on^houselight; ADD C(6); SHOW 13, nCS2, C(6); Z6 ---> S4
+            @cs3: on^cs3out; ADD C(7); SHOW 18, nCS3, C(7); Z7 ---> S5
 S3,
-    10": Z8; Z12 ---> S1
+  10": Z8; Z12 ---> S1
 S4,
-    5": Z8; Z12 ---> S1
+  5": Z8; Z12 ---> S1
 S5,
-    5": Z8; Z12 ---> S1
+  5": Z8; Z12 ---> S1
 
 S.S.25,
 S1,
-    #Z12: ---> S2
+  #Z12: ---> S2
 
 S2,
-    10": off^csout ---> S1
+  10": off^csout ---> S1
 
 \Deliver US
 S.S.7,
 S1,
-    #Z2:  IF C(3) = 1 [@portEntered, @portNotEntered]
-                 @portEntered: SET C(3) = 0 ---> S2      \sucrose
-                 @portNotEntered: ---> S1
+  #Z2: IF C(3) = 1 [@portEntered, @portNotEntered]
+         @portEntered: SET C(3) = 0 ---> S2   \sucrose
+         @portNotEntered: ---> S1
 
 S2,
-    4": on^pump; SET Q(C(2)) = T; SET R(C(2)) = (T - U)*100; SHOW 12, USLatency, R(C(2)); ADD C(2); SET Q(C(2)) = -987.987; SET R(C(2) + 1) = -987.987; ADD C(8); SHOW 11, NumSucroseDeliveries, C(8)  ---> S3         \increment sucrose delivery counter
+  4": on^pump; SET Q(C(2)) = T; SET R(C(2)) = (T - U)*100; SHOW 12, USLatency, R(C(2)); ADD C(2); SET Q(C(2)) = -987.987; SET R(C(2) + 1) = -987.987; ADD C(8); SHOW 11, NumSucroseDeliveries, C(8) ---> S3     \increment sucrose delivery counter
 
 \ Reset "port entered" flag,
 S3,
-    \ Uncomment for C57s
-    \0.5": off^pump ---> S1
-    \ Uncomment for CD1s
-    1": off^pump ---> S1
+  \ Uncomment for C57s
+  \0.5": off^pump ---> S1
+  \ Uncomment for CD1s
+  1": off^pump ---> S1
 
-S.S.8,   \CS1
+S.S.8,  \CS1
 S1,
-    #Z5: on^tone1; on^tone2 ---> S1
+  #Z5: on^tone1; on^tone2 ---> S1
 
-S.S.9,   \CS2
+S.S.9,  \CS2
 S1,
-    #Z6: on^tone2; on^tone4 ---> S1
+  #Z6: on^tone2; on^tone4 ---> S1
 
-S.S.10,   \CS3
+S.S.10,  \CS3
 S1,
-    #Z7: on^tone2; on^tone1; on^tone3 ---> S1
+  #Z7: on^tone2; on^tone1; on^tone3 ---> S1
 
 S.S.11,
 S1,
-    #Z8: off^tone1; off^tone2; off^tone3;off^tone4; on^cs1out; off^cs2out; off^cs3out; off^houselight; SET C(10) = 0 ---> S1
+  #Z8: off^tone1; off^tone2; off^tone3;off^tone4; on^cs1out; off^cs2out; off^cs3out; off^houselight; SET C(10) = 0 ---> S1
 
 \ Session timer
 S.S.12,
 S1,
-    #start: SET T = 0 ---> S2
+  #start: SET T = 0 ---> S2
 S2,
-    0.01": SET T = T + 0.01 ---> S2
+  0.01": SET T = T + 0.01 ---> S2
 
 \ Stop session after however many minutes
 S.S.13,
 S1,
-    #start: on^cs1out; on^whitenoise; on^houselight; ---> S2
+  #start: on^cs1out; on^whitenoise; on^houselight; ---> S2
 S2,
-    \\\ Uncomment for Reward Training
-    60': off^whitenoise; off^houselight ---> stopabortflush \when time is up, store data and turn off everything.
-    \\\ Uncomment for Reward Competition
-    \30': off^whitenoise; off^houselight ---> stopabortflush \when time is up, store data and turn off everything.
+  \\\ Uncomment for Reward Training
+  60': off^whitenoise; off^houselight ---> stopabortflush \when time is up, store data and turn off everything.
+  \\\ Uncomment for Reward Competition
+  \30': off^whitenoise; off^houselight ---> stopabortflush \when time is up, store data and turn off everything.
 
 \ On Screen clock
 S.S.14,
 S1,
-    #start: on^fan ---> S2
+  #start: on^fan ---> S2
 S2,
-    1": SHOW 5, Clock, T; SET A = (T - U)*100; SHOW 9, TimeFromLastCS, A ---> SX
+  1": SHOW 5, Clock, T; SET A = (T - U)*100; SHOW 9, TimeFromLastCS, A ---> SX
 
 \ Keep time since the start of CS presentation
 S.S.15,
 S1,
-    #Z2: SET U = T ---> S1
+  #Z2: SET U = T ---> S1
