@@ -3,6 +3,10 @@
 # Moving to the root directory of the Github repo
 cd $(git rev-parse --show-toplevel)
 
+# Turning off the Conda Environment 
+# so that you don't add anything onto an existing environment
+conda deactivate
+
 # Creating the Conda environment
 # Doing it in the root directory to simplify
 conda create --prefix ./behavioral_processing_env python=3.9 --yes
