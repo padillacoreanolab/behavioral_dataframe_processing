@@ -100,18 +100,21 @@ def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_scor
 
     return id_to_elo_score
 
-def elo_score_initiator(data_frame, winner_column, loser_column, additional_columns=None):
+def iterate_elo_score_calculation_for_data_frame(data_frame, winner_column, loser_column, additional_columns=None):
     """
-    lol
+    Iterates through a dataframe that has the ID of winners and losers for a given event. 
+    A dictionary will be created that contains the information of the event, 
+    which can then be turned into a dataframe. Each key is either from winner or loser's perspective. 
 
     Args:
-        data_frame(Pandas DataFrame)
-        winner_column(str)
-        loser_column(str)
-        additional_columns(list)
+        data_frame(Pandas DataFrame): 
+        winner_column(str): The name of the column that has the winner's ID
+        loser_column(str): The name of the column that has the loser's ID
+        additional_columns(list): Additional columns to take from the 
 
     Returns:
-        Dict: 
+        Dict: With a key value pair for each event either from the winner or loser's perspective. 
+            This can be turned into a dataframe with each key value pair being a row.
     """
     if additional_columns is None:
         additional_columns = []
