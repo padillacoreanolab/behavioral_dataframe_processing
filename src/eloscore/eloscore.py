@@ -4,6 +4,8 @@
 import re
 from collections import defaultdict
 
+from pyparsing import col
+
 def get_all_animal_ids(animal_string):
     """
     Converts a string that contains the ID of animals, and only gets the IDs. 
@@ -97,3 +99,73 @@ def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_scor
         agent_elo_score=current_winner_rating, score=0, number_of_decimals=1, **calculate_elo_score_params)
 
     return id_to_elo_score
+
+def elo_score_initiator(data_frame, winner_column, loser_column, additional_columns=None):
+    """
+    lol
+
+    Args:
+        data_frame(Pandas DataFrame)
+        winner_column(str)
+        loser_column(str)
+        additional_columns(list)
+
+    Returns:
+        Dict: 
+    """
+    if additional_columns is None:
+        additional_columns = []
+
+    # Dictionary that keeps track of the current Elo score of the subject
+    id_to_elo_score = defaultdict(lambda:1000)
+    # Dictionary that will be converted to a DataFrame
+    index_to_elo_score_and_meta_data = defaultdict(dict)
+
+    # Indexes that will identify which row the dictionary key value pair will be
+    # The number of the index has no significance other than being the number of the row
+    all_indexes = iter(range(0, 99999))
+
+    # Keeping track of the number of matches
+    total_match_number = 1
+
+    for index, row in data_frame.dropna(subset=winner_column).iterrows():
+        # Getting the ID of the winner subject
+        winner_id = row[winner_column]
+        # Getting the ID of the loser subject
+        loser_id = row[loser_column]
+
+        # Getting the current Elo Score
+        current_winner_rating = id_to_elo_score[winner_id] 
+        current_loser_rating = id_to_elo_score[loser_id] 
+
+        # Updating the dictionary with ID keys and Elo Score values
+        update_elo_score(winner_id=winner_id, loser_id=loser_id, id_to_elo_score=id_to_elo_score)
+
+        # Saving all the data for the winner
+        winner_index = next(all_indexes)
+        index_to_elo_score_and_meta_data[winner_index]["total_match_number"] = total_match_number
+        index_to_elo_score_and_meta_data[winner_index]["subject_id"] = winner_id
+        index_to_elo_score_and_meta_data[winner_index]["agent_id"] = loser_id
+        index_to_elo_score_and_meta_data[winner_index]["original_elo_score"] = current_winner_rating
+        index_to_elo_score_and_meta_data[winner_index]["updated_elo_score"] = id_to_elo_score[winner_id]
+        index_to_elo_score_and_meta_data[winner_index]["win_draw_loss"] = 1
+        for column in additional_columns:
+            index_to_elo_score_and_meta_data[winner_index][column] = row[column]  
+
+        # Saving all the data for the loser
+        loser_index = next(all_indexes)
+        index_to_elo_score_and_meta_data[loser_index]["total_match_number"] = total_match_number
+        index_to_elo_score_and_meta_data[loser_index]["subject_id"] = loser_id
+        index_to_elo_score_and_meta_data[loser_index]["agent_id"] = loser_id
+        index_to_elo_score_and_meta_data[loser_index]["original_elo_score"] = current_loser_rating
+        index_to_elo_score_and_meta_data[loser_index]["updated_elo_score"] = id_to_elo_score[loser_id]
+        index_to_elo_score_and_meta_data[loser_index]["win_draw_loss"] = 1
+        index_to_elo_score_and_meta_data[loser_index]["session_number"] = row["session_number"]
+        index_to_elo_score_and_meta_data[loser_index]["session_number_plotting"] = row["session_number_plotting"]
+        for column in additional_columns:
+            index_to_elo_score_and_meta_data[loser_index][column] = row[column]  
+
+        # Updating the match number
+        total_match_number += 1
+
+    return index_to_elo_score_and_meta_data
