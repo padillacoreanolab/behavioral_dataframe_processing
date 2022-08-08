@@ -163,8 +163,6 @@ def iterate_elo_score_calculation_for_data_frame(data_frame, winner_column, lose
         index_to_elo_score_and_meta_data[loser_index]["original_elo_score"] = current_loser_rating
         index_to_elo_score_and_meta_data[loser_index]["updated_elo_score"] = id_to_elo_score[loser_id]
         index_to_elo_score_and_meta_data[loser_index]["win_draw_loss"] = 1
-        index_to_elo_score_and_meta_data[loser_index]["session_number"] = row["session_number"]
-        index_to_elo_score_and_meta_data[loser_index]["session_number_plotting"] = row["session_number_plotting"]
         for column in additional_columns:
             index_to_elo_score_and_meta_data[loser_index][column] = row[column]  
 
