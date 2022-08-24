@@ -48,26 +48,26 @@ def calculate_elo_score(subject_elo_score, agent_elo_score, k_factor=20, score=1
     # Rounding to `number_of_decimals`
     return round(new_elo_score, number_of_decimals)
 
-def add_session_number_column(data_frame, indexes, session_number_column="session_number"):
+def add_session_number_column(dataframe, indexes, session_number_column="session_number"):
     """
     Add a column to Pandas DataFrame that contains the session number. 
     This will only add session numbers to the rows specified by indexes. 
     You can fill in the empty cells with method: DataFrame.fillna(method='ffill')
     
     Args:
-        data_frame(Pandas DataFrame): The DataFrame to add the session number column
+        dataframe(Pandas DataFrame): The DataFrame to add the session number column
         indexes(list): List of indexes for which rows to add the session numbers
         session_number_column(str): Name of the column to add
         
     Returns:
         Pandas DataFrame: DataFrame with the session numbers added
     """
-    copy_data_frame = data_frame.copy()
+    copy_dataframe = dataframe.copy()
     session_number = 1
     for index in indexes:
-        copy_data_frame.at[index, session_number_column] = session_number
+        copy_dataframe.at[index, session_number_column] = session_number
         session_number += 1
-    return copy_data_frame
+    return copy_dataframe
 
 def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_score=1000, \
     **calculate_elo_score_params):
@@ -100,14 +100,14 @@ def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_scor
 
     return id_to_elo_score
 
-def iterate_elo_score_calculation_for_data_frame(data_frame, winner_column, loser_column, additional_columns=None):
+def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_column, additional_columns=None):
     """
     Iterates through a dataframe that has the ID of winners and losers for a given event. 
     A dictionary will be created that contains the information of the event, 
     which can then be turned into a dataframe. Each key is either from winner or loser's perspective. 
 
     Args:
-        data_frame(Pandas DataFrame): 
+        dataframe(Pandas DataFrame): 
         winner_column(str): The name of the column that has the winner's ID
         loser_column(str): The name of the column that has the loser's ID
         additional_columns(list): Additional columns to take from the 
@@ -131,7 +131,7 @@ def iterate_elo_score_calculation_for_data_frame(data_frame, winner_column, lose
     # Keeping track of the number of matches
     total_match_number = 1
 
-    for index, row in data_frame.dropna(subset=winner_column).iterrows():
+    for index, row in dataframe.dropna(subset=winner_column).iterrows():
         # Getting the ID of the winner subject
         winner_id = row[winner_column]
         # Getting the ID of the loser subject
