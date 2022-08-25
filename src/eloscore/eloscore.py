@@ -174,7 +174,7 @@ def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_
         loser_index = next(all_indexes)
         index_to_elo_score_and_meta_data[loser_index]["total_match_number"] = total_match_number
         index_to_elo_score_and_meta_data[loser_index]["subject_id"] = loser_id
-        index_to_elo_score_and_meta_data[loser_index]["agent_id"] = loser_id
+        index_to_elo_score_and_meta_data[loser_index]["agent_id"] = winner_id
         index_to_elo_score_and_meta_data[loser_index]["original_elo_score"] = current_loser_rating
         index_to_elo_score_and_meta_data[loser_index]["updated_elo_score"] = id_to_elo_score[loser_id]
         index_to_elo_score_and_meta_data[loser_index]["win_draw_loss"] = loser_score
