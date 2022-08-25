@@ -3,7 +3,7 @@
 """
 import re
 from collections import defaultdict
-
+import pandas as pd
 from pyparsing import col
 
 def get_all_animal_ids(animal_string):
@@ -23,7 +23,7 @@ def get_all_animal_ids(animal_string):
     all_numbers = [num for num in all_words if re.match(r'^-?\d+(?:\.\d+)$', num)]
     return tuple(all_numbers)
 
-def calculate_elo_score(subject_elo_score, agent_elo_score, k_factor=20, score=1, number_of_decimals=None):
+def calculate_elo_score(subject_elo_score, agent_elo_score, k_factor=20, score=1, number_of_decimals=1):
     """
     Calculates the Elo score of a given subject given it's original score, it's opponent, 
     the K-Factor, and whether or not it has won or not. 
@@ -70,7 +70,7 @@ def add_session_number_column(dataframe, indexes, session_number_column="session
     return copy_dataframe
 
 def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_score=1000, \
-    **calculate_elo_score_params):
+    winner_score=1, loser_score=0, **calculate_elo_score_params):
     """
     Updates the Elo score in a dictionary that contains the ID of the subject as keys, 
     and the Elo score as the values. You can also adjust how the Elo score is calculated with 'calculate_elo_score_params'.
@@ -94,13 +94,13 @@ def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_scor
     
     # Calculating Elo score            
     id_to_elo_score[winner_id] = calculate_elo_score(subject_elo_score=current_winner_rating, \
-        agent_elo_score=current_loser_rating, score=1, number_of_decimals=1, **calculate_elo_score_params)
+        agent_elo_score=current_loser_rating, score=winner_score, **calculate_elo_score_params)
     id_to_elo_score[loser_id] = calculate_elo_score(subject_elo_score=current_loser_rating, \
-        agent_elo_score=current_winner_rating, score=0, number_of_decimals=1, **calculate_elo_score_params)
+        agent_elo_score=current_winner_rating, score=loser_score, **calculate_elo_score_params)
 
     return id_to_elo_score
 
-def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_column, additional_columns=None):
+def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_column, tie_column=None, additional_columns=None):
     """
     Iterates through a dataframe that has the ID of winners and losers for a given event. 
     A dictionary will be created that contains the information of the event, 
@@ -141,8 +141,23 @@ def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_
         current_winner_rating = id_to_elo_score[winner_id] 
         current_loser_rating = id_to_elo_score[loser_id] 
 
+        if tie_column:
+            # When there is nothing in the tie column
+            if pd.isna(dataframe[tie_column][index]):
+                winner_score = 1
+                loser_score = 0
+            # When there is value in the tie column
+            else:
+                winner_score = 0.5
+                loser_score = 0.5
+        # When there is no tie column
+        else:
+            winner_score = 1
+            loser_score = 0
+
         # Updating the dictionary with ID keys and Elo Score values
-        update_elo_score(winner_id=winner_id, loser_id=loser_id, id_to_elo_score=id_to_elo_score)
+        update_elo_score(winner_id=winner_id, loser_id=loser_id, id_to_elo_score=id_to_elo_score, \
+            winner_score=winner_score, loser_score=loser_score)
 
         # Saving all the data for the winner
         winner_index = next(all_indexes)
@@ -151,7 +166,7 @@ def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_
         index_to_elo_score_and_meta_data[winner_index]["agent_id"] = loser_id
         index_to_elo_score_and_meta_data[winner_index]["original_elo_score"] = current_winner_rating
         index_to_elo_score_and_meta_data[winner_index]["updated_elo_score"] = id_to_elo_score[winner_id]
-        index_to_elo_score_and_meta_data[winner_index]["win_draw_loss"] = 1
+        index_to_elo_score_and_meta_data[winner_index]["win_draw_loss"] = winner_score
         for column in additional_columns:
             index_to_elo_score_and_meta_data[winner_index][column] = row[column]  
 
@@ -162,7 +177,7 @@ def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_
         index_to_elo_score_and_meta_data[loser_index]["agent_id"] = loser_id
         index_to_elo_score_and_meta_data[loser_index]["original_elo_score"] = current_loser_rating
         index_to_elo_score_and_meta_data[loser_index]["updated_elo_score"] = id_to_elo_score[loser_id]
-        index_to_elo_score_and_meta_data[loser_index]["win_draw_loss"] = 1
+        index_to_elo_score_and_meta_data[loser_index]["win_draw_loss"] = loser_score
         for column in additional_columns:
             index_to_elo_score_and_meta_data[loser_index][column] = row[column]  
 
