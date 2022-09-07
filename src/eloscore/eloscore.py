@@ -2,6 +2,7 @@
 """
 """
 import re
+import operator
 from collections import defaultdict
 import pandas as pd
 from pyparsing import col
