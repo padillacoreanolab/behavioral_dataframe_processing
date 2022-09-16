@@ -2,6 +2,7 @@
 """
 """
 import re
+import operator
 from collections import defaultdict
 import pandas as pd
 from pyparsing import col
@@ -100,6 +101,28 @@ def update_elo_score(winner_id, loser_id, id_to_elo_score=None, default_elo_scor
 
     return id_to_elo_score
 
+def get_ranking_from_elo_score_dictionary(input_dict, subject_id):
+    """
+    Orders a dictionary of subject ID keys to ELO score values by ELO score. 
+    And then gets the rank of the subject with the inputted ID.
+    Lower ranks like 1 would represent those subjects with higher ELO scores and vice versa.
+
+    Args:
+        input_dict(dict): 
+            Dictionary of subject ID keys to ELO score values
+        subject_id(str, int, or any value that's a key in input dict): 
+            The ID of the subject that you want the ranking of
+
+    Returns:
+        int:
+            Ranking of the subject with the ID inputted
+    """
+    # Sorting the subject ID's by ELO score
+    sorted_subject_to_elo_score = sorted(input_dict.items(), key=operator.itemgetter(1), reverse=True)
+    # Getting the rank of the subject based on ELO score
+    return [subject_tuple[0] for subject_tuple in sorted_subject_to_elo_score].index(subject_id) + 1
+
+
 def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_column, tie_column=None, additional_columns=None):
     """
     Iterates through a dataframe that has the ID of winners and losers for a given event. 
@@ -167,6 +190,9 @@ def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_
         index_to_elo_score_and_meta_data[winner_index]["original_elo_score"] = current_winner_rating
         index_to_elo_score_and_meta_data[winner_index]["updated_elo_score"] = id_to_elo_score[winner_id]
         index_to_elo_score_and_meta_data[winner_index]["win_draw_loss"] = winner_score
+        index_to_elo_score_and_meta_data[winner_index]["subject_ranking"] = get_ranking_from_elo_score_dictionary(id_to_elo_score, winner_id)
+        index_to_elo_score_and_meta_data[winner_index]["agent_ranking"] = get_ranking_from_elo_score_dictionary(id_to_elo_score, loser_id)
+
         for column in additional_columns:
             index_to_elo_score_and_meta_data[winner_index][column] = row[column]  
 
@@ -178,6 +204,8 @@ def iterate_elo_score_calculation_for_dataframe(dataframe, winner_column, loser_
         index_to_elo_score_and_meta_data[loser_index]["original_elo_score"] = current_loser_rating
         index_to_elo_score_and_meta_data[loser_index]["updated_elo_score"] = id_to_elo_score[loser_id]
         index_to_elo_score_and_meta_data[loser_index]["win_draw_loss"] = loser_score
+        index_to_elo_score_and_meta_data[loser_index]["subject_ranking"] = get_ranking_from_elo_score_dictionary(id_to_elo_score, loser_id)
+        index_to_elo_score_and_meta_data[loser_index]["agent_ranking"] = get_ranking_from_elo_score_dictionary(id_to_elo_score, winner_id)
         for column in additional_columns:
             index_to_elo_score_and_meta_data[loser_index][column] = row[column]  
 
