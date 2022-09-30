@@ -22,3 +22,5 @@ conda install -c conda-forge matplotlib --yes
 # Installing libraries for MED-PC data processing
 pip install medpc2excel 
 conda install -c conda-forge moviepy --yes
+conda install -c conda-forge xlrd --yes
+ conda install -c conda-forge matplotlib-label-lines --yes
