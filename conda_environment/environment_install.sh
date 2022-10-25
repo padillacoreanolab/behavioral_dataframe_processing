@@ -23,4 +23,4 @@ conda install -c conda-forge matplotlib --yes
 pip install medpc2excel 
 conda install -c conda-forge moviepy --yes
 conda install -c conda-forge xlrd --yes
- conda install -c conda-forge matplotlib-label-lines --yes
+conda install -c conda-forge matplotlib-label-lines --yes
