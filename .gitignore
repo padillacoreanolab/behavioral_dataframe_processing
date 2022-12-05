@@ -5,6 +5,7 @@
 data/
 proc/
 old/
+back_up/
 *xlsx
 
 # Byte-compiled / optimized / DLL files

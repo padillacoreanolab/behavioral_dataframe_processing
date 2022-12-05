@@ -17,6 +17,7 @@
     - Directory that has a record of previous iterations of the Jupyter Notebooks 
 - [./src](./src)
     - Directory that has the Python source code used in the Jupyter Notebooks. All the original functions used in the notebooks will be imported from this.
+`TODO`: Add sections on `conda environments` and `scripts`
 
 ## Steps To Take
 
