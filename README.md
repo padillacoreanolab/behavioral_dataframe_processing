@@ -77,7 +77,7 @@ https://code.visualstudio.com/Download
 2. Click on [./jupyter_notebooks](./jupyter_notebooks) in the Jupyter Notebooks GUI (Should be in the web browser)
 
 ### Step 3. Run each Data Processing/Analysis Jupyter Notebooks
-1. Follow the instructions to run the Jupyter Notebooks at [./jupyter_notebooks/README.MD](./jupyter_notebooks/README.MD)
+1. Follow the instructions to run the Jupyter Notebooks at [./jupyter_notebooks/MED_PC](./jupyter_notebooks/MED_PC)
     - NOTE: The dataframes and the plots should be saved in subdirectories in: (./jupyter_notebooks/proc)[./jupyter_notebooks/proc]
 
 ## Resources
